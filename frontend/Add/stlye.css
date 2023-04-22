@@ -46,6 +46,9 @@ body {
     background-color: #FFFFFF;
     /* text-align: left; */
     /* justify-content: baseline; */
+    resize: none;
+    vertical-align: top;
+    text-align: left;
     border-radius: 5px;
     font-size: 20px;
     max-width: 943px;

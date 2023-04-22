@@ -47,17 +47,22 @@
                 <input type = "time"  class = "time"></input>
             </div>
             <div class = "line">
-                <select class = "ans" name="cars" id="cars">
-                    <option value="">Color</option>
-                    <option value="">1</option>
-                    <option value="">2</option>
-                    <option value="">3</option>
-                </select>
+                <form>
+                    <input type="radio" name="color" value="red"><img src="red.png" width="20" height="20">
+                    <input type="radio" name="color" value="green"><img src="orange.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="yellow.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="green.png" width="20" height="20"><br>
+                    <input type="radio" name="color" value="blue"><img src="cyan.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="blue.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="purple.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="gray.png" width="20" height="20">
+                </form>
             </div>
 
         </div>
+        <br>
         <div>
-            <input class = "detail">Detail</input>
+            <textarea class="detail" placeholder="detail" cols="80" rows="10" id="textbox" type="text" name="textbox"></textarea>
             <button class = "add">
                 Add
             </button>
