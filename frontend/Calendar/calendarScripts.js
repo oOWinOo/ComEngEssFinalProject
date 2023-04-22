@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             row.classList.add("days");
             let c1 = row.insertCell(count);
-            c1.innerHTML = `<td><p class = "date">`+`${i}`+`</p></td>`
+            c1.innerHTML = `<td><p class = "date" onclick="choseDate()">`+`${i}`+`</p></td>`
             i++;
             count++;
           }

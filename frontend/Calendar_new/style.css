@@ -103,16 +103,23 @@ html {
 .days div:hover:not(.today) {
   background-color: #7A97FF;
   cursor: pointer;
-  border-radius: 100%;
+  /* border-radius: 100%; */
+
 }
 
 .prev-date,
 .next-date {
   opacity: 0.5;
 }
-
-.today {
+.today:hover{
   background-color: #7A97FF;
+  cursor: pointer;
+  /* border-radius: 100%; */
+}
+.today {
+  background-color: #B1C2FF;
+  border-radius: 100%;
+  cursor: pointer;
 }
 
 .prev,.next{
