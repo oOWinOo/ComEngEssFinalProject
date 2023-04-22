@@ -71,6 +71,7 @@ td {
 .date:hover{
     color: #fff;
     background-color: rgba(0, 17, 168,0.32);
+    cursor: pointer;
 
 
     /* height: 64px;
@@ -104,6 +105,7 @@ td {
 }
 #triangle-left:hover,#triangle-right:hover{
     border-color: transparent transparent transparent #3c3b3b;
+    cursor: pointer;
 }
 #triangle-left{
     left: 15%;
