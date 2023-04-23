@@ -19,6 +19,7 @@ const months = [
 const todayid = date.getDate()+months[date.getMonth()]+date.getFullYear();
 
 const renderCalendar = () => {
+  prevChose = null;
   date.setDate(1);
 
   const monthDays = document.querySelector(".days");

@@ -18,6 +18,7 @@ const months = [
 const todayid = date.getDate()+months[date.getMonth()]+date.getFullYear();
 
 const renderCalendar = () => {
+  prevChose = null;
   date.setDate(1);
 
   const monthDays = document.querySelector(".days");
@@ -88,13 +89,18 @@ renderCalendar();
 
 
 function choseDate(id){
+  
   if(prevChose != null){
+    
     if(prevChose == todayid){
       document.getElementById(prevChose).style.backgroundColor = "#B1C2FF";
     }
     else{
+      
       document.getElementById(prevChose).style.backgroundColor = "#EBF0FF";
+
     }
+    
     
     
   }
