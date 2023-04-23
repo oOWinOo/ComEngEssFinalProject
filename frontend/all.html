@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="allStyle.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <nav>
+        <ul>
+            <button id="log-out-button">Logout</button>
+        </ul>
+    </nav>
+
+    <div class="container">
+    <div class="todolist">
+        <h2 id="Todo-List-Text">To do List</h2>
+        <h2 id="Day">21 April 2023</h2>   
+        <div id="textbox">
+            <p>test text</p>
+        </div>
+    </div>
+      <div class="calendar">
+        <div class="month">
+          <i class="fas fa-angle-left prev"></i>
+          <div class="date">
+            <h1></h1>
+            <p></p>
+          </div>
+          <i class="fas fa-angle-right next"></i>
+        </div>
+        <div class="weekdays">
+          <div>SUN</div>
+          <div>MON</div>
+          <div>TUE</div>
+          <div>WED</div>
+          <div>THU</div>
+          <div>FRI</div>
+          <div>SAT</div>
+        </div>
+        <div class="days"></div>
+      </div>
+    </div>
+
+    <div class = "box">
+        <div>
+            <p class = "sign">Date</p>
+            <p class = "sign">Subject</p>
+            <p class = "sign">Start</p>
+            <p class = "sign">Finish</p>
+            <p class = "sign">Color</p>
+        </div>
+        <div class = "answer">
+            <div class = "line">
+                <input type = "date" class = "ans"></input>
+            </div>
+
+            <div class = "line">
+                <select class = "ans" name="cars" id="cars">
+                    <option value="0">Subject</option>
+                    <option value="Cal">Cal</option>
+                    <option value="Phy">Phy</option>
+                    <option value="GenChem">GenChem</option>
+                </select>
+            </div>
+
+            <div class = "line">
+                <input name = "start" type = "time"  class = "time"></input>
+            </div>
+
+            <div class = "line">
+                <input name = "finish" type = "time"  class = "time"></input>
+            </div>
+            <div class = "line">
+                <form>
+                    <input type="radio" name="color" value="red"><img src="Add\red.png" width="20" height="20">
+                    <input type="radio" name="color" value="orange"><img src="Add\orange.png" width="20" height="20">
+                    <input type="radio" name="color" value="yellow"><img src="Add\yellow.png" width="20" height="20">
+                    <input type="radio" name="color" value="green"><img src="Add\green.png" width="20" height="20"><br>
+                    <input type="radio" name="color" value="cyan"><img src="Add\cyan.png" width="20" height="20">
+                    <input type="radio" name="color" value="blue"><img src="Add\blue.png" width="20" height="20">
+                    <input type="radio" name="color" value="purple"><img src="Add\purple.png" width="20" height="20">
+                    <input type="radio" name="color" value="gray"checked><img src="Add\gray.png" width="20" height="20">
+                </form>
+            </div>
+
+        </div>
+        <br>
+        <div>
+            <textarea class="detail" placeholder="detail" cols="50" rows="10" id="textbox" type="text" name="textbox"></textarea>
+            <button class = "add" onclick="add()">
+                Add
+            </button>
+        </div>
+
+
+    </div>
+
+    
+
+    <script src="allScript.js"></script>
+  </body>
+</html>
