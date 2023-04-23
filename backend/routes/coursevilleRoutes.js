@@ -12,9 +12,12 @@ router.get(
   coursevilleController.getCourseAssignments
 );
 router.get(
-  "/get_assignment_detail/:item_id",
-  coursevilleController.getAssignmentDetail
+  "/get_course_assignments/:cv_cid",
+  coursevilleController.getCourseAssignments
 );
+// router.get("/get_item_assignments/:item_iD",
+// coursevilleController.getCourseAssignments)
+
 router.get("/logout", coursevilleController.logout);
 
 module.exports = router;
