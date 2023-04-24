@@ -147,6 +147,4 @@ function add(){
   // Reset the form
 
 };
-document.getElementById('add').addEventListener('click',add);
-
 
