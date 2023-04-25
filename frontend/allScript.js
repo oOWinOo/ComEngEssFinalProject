@@ -14,10 +14,11 @@ const months = [
   "November",
   "December",
 ];
-
+const backendIPAddress = "127.0.0.1:3000";
 
 const todayid = date.getDate()+months[date.getMonth()]+date.getFullYear();
 
+//Render the calendar
 const renderCalendar = () => {
   prevChose = null;
   date.setDate(1);
@@ -106,8 +107,9 @@ function choseDate(id){
   
   
 }
+/*-------------------------------------------------------------------------------------*/
 
-
+// Add div
 function add(){
   // Do something with the form data, such as adding it to a list or sending it to a server
   // ... 
@@ -148,3 +150,34 @@ function add(){
 
 };
 
+//Render inside todolists
+
+const TodolistShow = () =>{
+  const todayHeader = document.getElementById("Day");
+  todayHeader.innerText = todayid;
+  console.log(todayHeader);
+  /*const member_list = document.getElementById("member-list");
+  member_list.innerHTML = "";
+  const member_dropdown = document.getElementById("name-to-add");
+  member_dropdown.innerHTML =
+    "<option value='0'>-- เลือกผู้ฝากซื้อ --</option>";
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+  await fetch(`http://${backendIPAddress}/items/members`, options)
+    .then((response) => response.json())
+    .then((data) => {
+      const members = data;
+      members.map((member) => {
+        member_list.innerHTML += `
+          <li>${member.full_name}</li>
+          `;
+        // ----------------- FILL IN YOUR CODE UNDER THIS AREA ONLY ----------------- //
+        member_dropdown.innerHTML += ``;
+        // ----------------- FILL IN YOUR CODE ABOVE THIS AREA ONLY ----------------- //
+      });
+    })
+    .catch((error) => console.error(error));*/
+};
+TodolistShow();

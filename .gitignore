@@ -1,3 +1,9 @@
 /.metadata/
 /bin/
+node_modules
+package-lock.json
+build
+npm-debug.log
+.nyc
 .env
+.DS_Store
