@@ -3,6 +3,7 @@ dotenv.config();
 const https = require("https");
 const url = require("url");
 const querystring = require("querystring");
+const { default: axios } = require("axios");
 
 const redirect_uri = `http://${process.env.backendIPAddress}/courseville/access_token`;
 const authorization_url = `https://www.mycourseville.com/api/oauth/authorize?response_type=code&client_id=${process.env.client_id}&redirect_uri=${redirect_uri}`;
@@ -53,7 +54,7 @@ exports.accessToken = (req, res) => {
           console.log(req.session);
           if (token) {
             res.writeHead(302, {
-              Location: `http://${process.env.frontendIPAddress}/home.html`,
+              Location: `http://${process.env.frontendIPAddress}/index.html`,
             });
             res.end();
           }
@@ -71,7 +72,7 @@ exports.accessToken = (req, res) => {
   }
 };
 
-// Example: Send "GET" request to CV endpoint to get user profile information
+//Get Profile Info
 exports.getProfileInformation = (req, res) => {
   try {
     const profileOptions = {
@@ -104,34 +105,44 @@ exports.getProfileInformation = (req, res) => {
   }
 };
 
-// TODO #3.2: Send "GET" request to CV endpoint to get all courses that you enrolled
-exports.getCourses = (req, res) => {
+//Get User's Courses
+exports.getCourses = async (req, res) => {
   const profileOptions = {
     headers: {
       Authorization: `Bearer ${req.session.token.access_token}`,
     },
   };
-  let data = ''
   try{
-    https.get("https://www.mycourseville.com/api/v1/public/get/user/courses", profileOptions, (ress) => {
-      ress.on('data', (chunk) => {
+    /*
+    https.get("https://www.mycourseville.com/api/v1/public/get/user/courses", profileOptions, (res) => {
+      res.on('data', (chunk) => {
         data += chunk;
       });
     
-      ress.on('end', () => {
-        res.send(data);
+      res.on('end', () => {
+        //res.send(data);
         console.log(data)
-        res.end();
+        //res.end();
       });
-    })
+    })*/
+    const CoursesReq = await axios.get("https://www.mycourseville.com/api/v1/public/get/user/courses" ,profileOptions);
+    const data = CoursesReq.data.data.student;
+    const resData = [];
+    for (let i = 0; i < data.length; i++){
+      if (data[i].year == "2022" && data[i].semester == "2"){
+        resData.push(data[i].cv_cid);
+      }
+    }
+  
+    res.status(200).send(resData);
   }catch (error) {
     console.log(error);
     console.log("Please logout, then login again.");
   }
 };
 
-// TODO #3.4: Send "GET" request to CV endpoint to get all course assignments based on cv_cid
-exports.getCourseAssignments = (req, res) => {
+//Get Course Assignments
+exports.getCourseAssignments = async (req, res) => {
   const cv_cid = req.params.cv_cid;
   try {
     const profileOptions = {
@@ -159,43 +170,41 @@ exports.getCourseAssignments = (req, res) => {
       console.error(err);
     });
     profileReq.end();
+    //console.log(AssignmentReq);
   } catch (error) {
     console.log(error);
     console.log("Please logout, then login again.");
   }
 };
 
-// TODO #3.2: Send "GET" request to CV endpoint to get all courses that you enrolled
-exports.getCourses = (req, res) => {
+//Get Assignment Details
+exports.getAssignmentDetail = async (req, res) => {
+  const itemid = req.params.item_id;
   const profileOptions = {
     headers: {
       Authorization: `Bearer ${req.session.token.access_token}`,
     },
   };
-  let data = ''
+  //let data = ''
   try{
-    https.get("https://www.mycourseville.com/api/v1/public/get/user/courses", profileOptions, (ress) => {
-      ress.on('data', (chunk) => {
+    /*https.get(`
+    https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${item_id}`, profileOptions, (res) => {
+      res.on('data', (chunk) => {
         data += chunk;
       });
     
-      ress.on('end', () => {
+      res.on('end', () => {
         res.send(data);
+        console.log(data)
         res.end();
       });
-    })
+    })*/
+    const Detail = await axios.get(`https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${itemid}` ,profileOptions);
+    res.status(200).send(Detail.data);
   }catch (error) {
     console.log(error);
     console.log("Please logout, then login again.");
   }
-};
-
-// Outstanding #2
-exports.getAssignmentDetail = (req, res) => {
-  const itemid = req.params.item_id;
-  // You should change the response below.
-  res.send("This route should get assignment details based on item_id.");
-  res.end();
 };
 
 exports.logout = (req, res) => {

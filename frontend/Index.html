@@ -17,9 +17,9 @@
   <body>
 
     <nav>
-        <ul>
-            <button id="log-out-button">Logout</button>
-        </ul>
+        <ul class="bar">
+            <button id="log-out-button" onclick=logout()>Logout</button>
+          </ul>
     </nav>
 
     <div class="container">
@@ -53,7 +53,7 @@
     </div>
 
     <div class = "box">
-        <div>
+        <div class="signBar">
             <p class = "sign">Date</p>
             <p class = "sign">Subject</p>
             <p class = "sign">Start</p>
@@ -82,7 +82,7 @@
                 <input name = "finish" type = "time"  class = "time"></input>
             </div>
             <div class = "line">
-                <form>
+                <form class="colo">
                     <input type="radio" name="color" value="red"><img src="Add\red.png" width="20" height="20">
                     <input type="radio" name="color" value="orange"><img src="Add\orange.png" width="20" height="20">
                     <input type="radio" name="color" value="yellow"><img src="Add\yellow.png" width="20" height="20">
@@ -101,6 +101,7 @@
             <button class = "add" onclick="add()">
                 Add
             </button>
+            <button onclick="getAllCourseAssignmentsId()">test</button>
         </div>
 
 

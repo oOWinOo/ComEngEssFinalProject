@@ -1,5 +1,7 @@
 const date = new Date();
 let prevChose = null;
+let toDoDate = document.getElementById("Day")
+
 const months = [
   "January",
   "February",
@@ -14,6 +16,7 @@ const months = [
   "November",
   "December",
 ];
+toDoDate.innerHTML = date.getDate()+" "+months[date.getMonth()]+" "+date.getFullYear();
 const backendIPAddress = "127.0.0.1:3000";
 
 const todayid = date.getDate()+months[date.getMonth()]+date.getFullYear();
@@ -25,21 +28,21 @@ const renderCalendar = () => {
 
   const monthDays = document.querySelector(".days");
 
-  const lastDay = new Date(
+  const lastDay = new Date( // last day of this month
     date.getFullYear(),
     date.getMonth() + 1,
     0
   ).getDate();
 
-  const prevLastDay = new Date(
+  const prevLastDay = new Date( // last day of prevMonth
     date.getFullYear(),
     date.getMonth(),
     0
   ).getDate();
 
-  const firstDayIndex = date.getDay();
+  const firstDayIndex = date.getDay();  //first day of this month
 
-  const lastDayIndex = new Date(
+  const lastDayIndex = new Date(  // last day of this month
     date.getFullYear(),
     date.getMonth() + 1,
     0
@@ -54,35 +57,55 @@ const renderCalendar = () => {
   document.querySelector(".date p").innerHTML = new Date().toDateString();
 
   let days = "";
-
+  // console.log(prevLastDay);
+  // console.log(firstDayIndex);
   for (let x = firstDayIndex; x > 0; x--) {
-    days += `<div id="${prevLastDay - x + 1}${months[date.getMonth()-1]}${date.getFullYear()}" class="prev-date" onclick= "choseDate(this.id)" >${prevLastDay - x + 1}</div>`;
+    if(date.getMonth()-1 < 0){
+      days += `<div id="${prevLastDay - x + 1} ${months[11]} ${date.getFullYear()-1}" class="prev-date" onclick= "choseDate(this.id)" >${prevLastDay - x + 1}</div>`;
+    }
+    else{
+      days += `<div id="${prevLastDay - x + 1} ${months[date.getMonth()-1]} ${date.getFullYear()}" class="prev-date" onclick= "choseDate(this.id)" >${prevLastDay - x + 1}</div>`;
+    }
+    
   }
 
   for (let i = 1; i <= lastDay; i++) {
     if (
       i === new Date().getDate() &&
-      date.getMonth() === new Date().getMonth()
+      date.getMonth() === new Date().getMonth() &&
+      date.getFullYear() === new Date().getFullYear()
     ) {
-      days += `<div id="${i}${months[date.getMonth()]}${date.getFullYear()}" class="today" onclick= "choseDate(this.id)">${i}</div>`;
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" class="today" onclick= "choseDate(this.id)">${i}</div>`;
     } else {
-      days += `<div id="${i}${months[date.getMonth()]}${date.getFullYear()}" onclick= "choseDate(this.id)">${i}</div>`;
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)">${i}</div>`;
     }
   }
 
   for (let j = 1; j <= nextDays; j++) {
-    days += `<div id="${j}${months[date.getMonth()+1]}${date.getFullYear()}" class="next-date" onclick= "choseDate(this.id)">${j}</div>`;
-    monthDays.innerHTML = days;
+
+    if(date.getMonth() >=11){
+      days += `<div id="${j} ${months[0]} ${date.getFullYear()+1}" class="next-date" onclick= "choseDate(this.id)">${j}</div>`;
+    }
+    else{
+      days += `<div id="${j} ${months[date.getMonth()+1]} ${date.getFullYear()}" class="next-date" onclick= "choseDate(this.id)">${j}</div>`;
+    }
+    
+    // monthDays.innerHTML = days;
   }
+  // console.log(days);
+  monthDays.innerHTML = days;
 };
 
 document.querySelector(".prev").addEventListener("click", () => {
+  
   date.setMonth(date.getMonth() - 1);
+  // console.log(date)
   renderCalendar();
 });
 
 document.querySelector(".next").addEventListener("click", () => {
   date.setMonth(date.getMonth() + 1);
+  // console.log(date)
   renderCalendar();
 });
 
@@ -91,9 +114,14 @@ renderCalendar();
 
 
 function choseDate(id){
+  toDoDate.innerHTML = id;
+  let dateArray = id.split(" "); // date month year
+  // console.log(dateArray);
+  document.querySelector(".date p").innerHTML = new Date(dateArray[2],months.findIndex(x => x===dateArray[1]),dateArray[0]).toDateString();
   if(prevChose != null){
     if(prevChose == todayid){
       document.getElementById(prevChose).style.backgroundColor = "#B1C2FF";
+      
     }
     else{
       document.getElementById(prevChose).style.backgroundColor = "#EBF0FF";
@@ -104,6 +132,7 @@ function choseDate(id){
   prevChose = id;
   // alert(id);
   document.getElementById(id).style.backgroundColor = "#7A97FF";
+  
   
   
 }
@@ -150,34 +179,48 @@ function add(){
 
 };
 
-//Render inside todolists
 
-const TodolistShow = () =>{
-  const todayHeader = document.getElementById("Day");
-  todayHeader.innerText = todayid;
-  console.log(todayHeader);
-  /*const member_list = document.getElementById("member-list");
-  member_list.innerHTML = "";
-  const member_dropdown = document.getElementById("name-to-add");
-  member_dropdown.innerHTML =
-    "<option value='0'>-- เลือกผู้ฝากซื้อ --</option>";
+//MyCourseVille Scripts
+const logout = async () => {
+  window.location.href = `http://${backendIPAddress}/courseville/logout`;
+};
+
+const getCourses = async () => {
   const options = {
     method: "GET",
     credentials: "include",
   };
-  await fetch(`http://${backendIPAddress}/items/members`, options)
-    .then((response) => response.json())
-    .then((data) => {
-      const members = data;
-      members.map((member) => {
-        member_list.innerHTML += `
-          <li>${member.full_name}</li>
-          `;
-        // ----------------- FILL IN YOUR CODE UNDER THIS AREA ONLY ----------------- //
-        member_dropdown.innerHTML += ``;
-        // ----------------- FILL IN YOUR CODE ABOVE THIS AREA ONLY ----------------- //
-      });
-    })
-    .catch((error) => console.error(error));*/
+  const data = await fetch(
+    `http://${backendIPAddress}/courseville/get_courses`, options).then((response) => response.json())
+  /*
+  const v = data.find(x => x.course_no == "2110221");
+  document.getElementById("ces-cid-value").innerHTML = v.cv_cid;*/
+  return data;
 };
-TodolistShow();
+
+const getEachCourseAssignments = async (cv_cid) => {
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+  const data = await fetch(
+    `http://${backendIPAddress}/courseville/get_course_assignments/${cv_cid}`, options).then((response) => response.json());
+  return data.data;
+};
+
+const getAllCourseAssignmentsId  = async () => {
+  const cv_cids = await getCourses();
+  let data = [];
+  for(let i=0;i < cv_cids.length; i++){
+    const courseAssignment = await getEachCourseAssignments(cv_cids[i]);
+    if (courseAssignment.length > 0){
+      courseAssignment.forEach(e => {
+        data.push(e.itemid);
+      });
+      //console.log(courseAssignment);
+    }
+  }
+  console.log(data);
+  return data;
+};
+
