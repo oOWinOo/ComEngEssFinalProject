@@ -26,8 +26,7 @@ exports.getTodolists = async (req, res) => {
 // TODO #1.2: Add an item to DynamoDB
 exports.addAssignment = async (req, res) => {
   const assignment_id = uuidv4();
-  const created_date = Date.now();
-  const assignment = { assignment_id: assignment_id, ...req.body, created_date: created_date };
+  const assignment = { assignment_id: assignment_id, ...req.body};
   const params = {
     TableName: process.env.aws_assignments_table,
     Item: assignment,

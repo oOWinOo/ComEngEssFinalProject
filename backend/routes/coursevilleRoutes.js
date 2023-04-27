@@ -12,9 +12,14 @@ router.get(
   coursevilleController.getCourseAssignments
 );
 router.get(
+  "/get_course_info/:cv_cid",
+  coursevilleController.getCourseInfo
+);
+router.get(
   "/get_assignment_detail/:item_id",
   coursevilleController.getAssignmentDetail
 );
+
 router.get("/logout", coursevilleController.logout);
 
 module.exports = router;

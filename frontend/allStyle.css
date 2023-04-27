@@ -20,6 +20,8 @@
       z-index: 100;
       background-color: #7A97FF;
       height: 5%;
+      max-height: 30px;
+      min-height:30px;
       border-color: #000;
   }
 
@@ -47,6 +49,11 @@
       border-radius: 5px;
       height: 75%;
       width: 10%;
+      
+      min-width: 70px;
+      max-width: 50px;
+      min-height: 20px;
+      max-height: 30px;
   }
   #log-out-button:hover {
       cursor: pointer;
@@ -67,7 +74,8 @@
   .calendar {
     min-width: 250px;
     width: 40%;
-    height: 80%;
+    height: 90%;
+    max-width: 600px;
     color: #000;
     background-color: #ffffff;
   }
@@ -209,6 +217,8 @@
 .box{
   display : flex;
   width: 90%;
+  margin-top: 5%;
+  margin-left: 5%;
   
 }
 .signBar{

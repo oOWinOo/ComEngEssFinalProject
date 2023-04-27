@@ -113,24 +113,12 @@ exports.getCourses = async (req, res) => {
     },
   };
   try{
-    /*
-    https.get("https://www.mycourseville.com/api/v1/public/get/user/courses", profileOptions, (res) => {
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-    
-      res.on('end', () => {
-        //res.send(data);
-        console.log(data)
-        //res.end();
-      });
-    })*/
     const CoursesReq = await axios.get("https://www.mycourseville.com/api/v1/public/get/user/courses" ,profileOptions);
     const data = CoursesReq.data.data.student;
     const resData = [];
     for (let i = 0; i < data.length; i++){
       if (data[i].year == "2022" && data[i].semester == "2"){
-        resData.push(data[i].cv_cid);
+        resData.push(data[i]);
       }
     }
   
@@ -177,6 +165,25 @@ exports.getCourseAssignments = async (req, res) => {
   }
 };
 
+exports.getCourseInfo = async (req, res) => {
+  const cv_cid = req.params.cv_cid;
+  const profileOptions = {
+    headers: {
+      Authorization: `Bearer ${req.session.token.access_token}`,
+    },
+  };
+  try{
+    const CoursesReq = await axios.get(`https://www.mycourseville.com/api/v1/public/get/course/info?cv_cid=${cv_cid}` ,profileOptions);
+    const data = CoursesReq.data.data;
+
+  
+    res.status(200).send(data);
+  }catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }
+};
+
 //Get Assignment Details
 exports.getAssignmentDetail = async (req, res) => {
   const itemid = req.params.item_id;
@@ -185,22 +192,10 @@ exports.getAssignmentDetail = async (req, res) => {
       Authorization: `Bearer ${req.session.token.access_token}`,
     },
   };
-  //let data = ''
+
   try{
-    /*https.get(`
-    https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${item_id}`, profileOptions, (res) => {
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-    
-      res.on('end', () => {
-        res.send(data);
-        console.log(data)
-        res.end();
-      });
-    })*/
     const Detail = await axios.get(`https://www.mycourseville.com/api/v1/public/get/item/assignment?item_id=${itemid}` ,profileOptions);
-    res.status(200).send(Detail.data);
+    res.status(200).send(Detail.data.data);
   }catch (error) {
     console.log(error);
     console.log("Please logout, then login again.");

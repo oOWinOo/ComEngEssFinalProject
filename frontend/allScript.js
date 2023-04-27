@@ -107,6 +107,7 @@ document.querySelector(".next").addEventListener("click", () => {
   date.setMonth(date.getMonth() + 1);
   // console.log(date)
   renderCalendar();
+
 });
 
 renderCalendar();
@@ -192,9 +193,7 @@ const getCourses = async () => {
   };
   const data = await fetch(
     `http://${backendIPAddress}/courseville/get_courses`, options).then((response) => response.json())
-  /*
-  const v = data.find(x => x.course_no == "2110221");
-  document.getElementById("ces-cid-value").innerHTML = v.cv_cid;*/
+
   return data;
 };
 
@@ -208,19 +207,66 @@ const getEachCourseAssignments = async (cv_cid) => {
   return data.data;
 };
 
-const getAllCourseAssignmentsId  = async () => {
-  const cv_cids = await getCourses();
-  let data = [];
-  for(let i=0;i < cv_cids.length; i++){
-    const courseAssignment = await getEachCourseAssignments(cv_cids[i]);
-    if (courseAssignment.length > 0){
-      courseAssignment.forEach(e => {
-        data.push(e.itemid);
-      });
-      //console.log(courseAssignment);
-    }
-  }
-  console.log(data);
+const getCourseName = async (cv_cid) =>{
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+  const data = await fetch(
+    `http://${backendIPAddress}/courseville/get_course_info/${cv_cid}`, options).then((response) => response.json());
+
   return data;
 };
+const getAssignTime = async (item_id) =>{
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+  const data = await fetch(
+    `http://${backendIPAddress}/courseville/get_assignment_detail/${item_id}`, options).then((response) => response.json());
+
+  return data;
+};
+
+const getAllCourseAssignments  = async () => {
+  const cv_cids = [];
+  const courses = await getCourses();
+  courses.forEach(e => {
+    cv_cids.push(e.cv_cid);
+  });
+  let dict = {
+    
+  }
+  for(let i=0;i < cv_cids.length; i++){
+    const courseAssignment = await getEachCourseAssignments(cv_cids[i]);
+    const courseName = (await getCourseName(cv_cids[i])).title;
+    if (!( courseName in dict)){
+      dict[courseName] = [];
+    }
+    if (courseAssignment.length > 0){
+      
+      for (const e of courseAssignment){
+        const itemInfo = await getAssignTime(e.itemid);
+        dict[courseName].push({cv_cid: cv_cids[i],
+          title:e.title,
+          itemid:e.itemid,
+          duedate:itemInfo.duedate,});
+      }
+    }
+  }
+  console.log(dict);
+  return dict;
+};
+
+async function test(){
+  console.log("press");
+  //getCourses();
+
+  await getAllCourseAssignments();
+
+  //getCourseName(24587);
+  // getCourses();
+  //getAssignTime(892965);
+  
+}
 
