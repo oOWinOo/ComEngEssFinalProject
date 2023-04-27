@@ -19,8 +19,8 @@ const months = [
 toDoDate.innerHTML = date.getDate()+" "+months[date.getMonth()]+" "+date.getFullYear();
 const backendIPAddress = "127.0.0.1:3000";
 
-const todayid = date.getDate()+months[date.getMonth()]+date.getFullYear();
-
+const todayid = date.getDate()+" "+months[date.getMonth()]+" "+date.getFullYear();
+const todayMonth = date.getMonth();
 //Render the calendar
 const renderCalendar = () => {
   prevChose = null;
@@ -50,11 +50,11 @@ const renderCalendar = () => {
 
   const nextDays = 7 - lastDayIndex - 1;
 
-  
+
 
   document.querySelector(".date h1").innerHTML = months[date.getMonth()];
+  
 
-  document.querySelector(".date p").innerHTML = new Date().toDateString();
 
   let days = "";
   // console.log(prevLastDay);
@@ -74,9 +74,15 @@ const renderCalendar = () => {
       i === new Date().getDate() &&
       date.getMonth() === new Date().getMonth() &&
       date.getFullYear() === new Date().getFullYear()
-    ) {
+    ) 
+    {
       days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" class="today" onclick= "choseDate(this.id)">${i}</div>`;
-    } else {
+    } 
+    else if(!(date.getMonth() === todayMonth) && i===1){
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)" style="background-color:#7A97FF;">${i}</div>`;
+      prevChose = `${i} ${months[date.getMonth()]} ${date.getFullYear()}`
+      toDoDate.innerHTML = `${i} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    }else {
       days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)">${i}</div>`;
     }
   }
@@ -92,12 +98,26 @@ const renderCalendar = () => {
     
     // monthDays.innerHTML = days;
   }
+  document.querySelector(".year").innerHTML = date.getFullYear();
+
+  if(date.getMonth() === todayMonth){
+    let x = new Date().toDateString().split(" ");
+    let y = x.pop();
+    document.querySelector(".date2").innerHTML = x.join(" ");
+
+  }
+  else{
+    let x = date.toDateString().split(" ");
+    let y = x.pop();
+    document.querySelector(".date2").innerHTML = x.join(" ");
+    
+    
+  }
   // console.log(days);
   monthDays.innerHTML = days;
 };
 
 document.querySelector(".prev").addEventListener("click", () => {
-  
   date.setMonth(date.getMonth() - 1);
   // console.log(date)
   renderCalendar();
@@ -117,10 +137,13 @@ renderCalendar();
 function choseDate(id){
   toDoDate.innerHTML = id;
   let dateArray = id.split(" "); // date month year
-  // console.log(dateArray);
-  document.querySelector(".date p").innerHTML = new Date(dateArray[2],months.findIndex(x => x===dateArray[1]),dateArray[0]).toDateString();
+  console.log(dateArray);
+  let x = new Date(dateArray[2],months.findIndex(x => x===dateArray[1]),dateArray[0]).toDateString().split(" ");
+  let y = x.pop();
+  document.querySelector(".date2").innerHTML = x.join(" ");
   if(prevChose != null){
     if(prevChose == todayid){
+
       document.getElementById(prevChose).style.backgroundColor = "#B1C2FF";
       
     }
@@ -130,6 +153,7 @@ function choseDate(id){
     
     
   }
+  document.querySelector(".year").innerHTML = dateArray[2];
   prevChose = id;
   // alert(id);
   document.getElementById(id).style.backgroundColor = "#7A97FF";
@@ -180,51 +204,63 @@ function add(){
 
 };
 
-
-//MyCourseVille Scripts
 const logout = async () => {
   window.location.href = `http://${backendIPAddress}/courseville/logout`;
 };
 
+//MyCourseVille Scripts
+
+
 const getCourses = async () => {
+  let start = Date.now() /1000;
+  
   const options = {
     method: "GET",
     credentials: "include",
   };
   const data = await fetch(
     `http://${backendIPAddress}/courseville/get_courses`, options).then((response) => response.json())
-
+  let finish = Date.now() /1000;
+  console.log("getCourse" +" = "+(finish-start));
   return data;
 };
 
 const getEachCourseAssignments = async (cv_cid) => {
+  let start = Date.now() /1000;
   const options = {
     method: "GET",
     credentials: "include",
   };
   const data = await fetch(
     `http://${backendIPAddress}/courseville/get_course_assignments/${cv_cid}`, options).then((response) => response.json());
+  let finish = Date.now() /1000;
+  console.log("getEachCourseAssign" +" = "+(finish-start));
   return data.data;
 };
 
 const getCourseName = async (cv_cid) =>{
+  let start = Date.now() /1000;
   const options = {
     method: "GET",
     credentials: "include",
   };
   const data = await fetch(
     `http://${backendIPAddress}/courseville/get_course_info/${cv_cid}`, options).then((response) => response.json());
-
+  let finish = Date.now() /1000;
+  console.log("getCourseName" +" = "+(finish-start));
   return data;
 };
 const getAssignTime = async (item_id) =>{
+  let start = Date.now() /1000;
+
   const options = {
     method: "GET",
     credentials: "include",
   };
   const data = await fetch(
     `http://${backendIPAddress}/courseville/get_assignment_detail/${item_id}`, options).then((response) => response.json());
-
+    let finish = Date.now() /1000;
+    console.log("getAssignTime" +" = "+(finish-start));
   return data;
 };
 
@@ -234,39 +270,72 @@ const getAllCourseAssignments  = async () => {
   courses.forEach(e => {
     cv_cids.push(e.cv_cid);
   });
-  let dict = {
-    
-  }
+  let assignments = [];
   for(let i=0;i < cv_cids.length; i++){
     const courseAssignment = await getEachCourseAssignments(cv_cids[i]);
     const courseName = (await getCourseName(cv_cids[i])).title;
-    if (!( courseName in dict)){
-      dict[courseName] = [];
-    }
+    //if (!( cv_cids[i] in assignments)){
+    //  assignments[cv_cids[i]] = [];
+    //}
     if (courseAssignment.length > 0){
       
       for (const e of courseAssignment){
         const itemInfo = await getAssignTime(e.itemid);
-        dict[courseName].push({cv_cid: cv_cids[i],
+        assignments.push({courseName: courseName,
           title:e.title,
-          itemid:e.itemid,
-          duedate:itemInfo.duedate,});
+          assignment_id:e.itemid,
+          duedate:itemInfo.duedate,
+          status:0});
       }
     }
   }
-  console.log(dict);
-  return dict;
+  console.log(assignments);
+  return assignments;
 };
 
 async function test(){
   console.log("press");
   //getCourses();
 
-  await getAllCourseAssignments();
 
   //getCourseName(24587);
   // getCourses();
   //getAssignTime(892965);
   
 }
+const  addAll = async () =>{
+  console.log("Just Add!!");
+  const dt = await getAllCourseAssignments();
+  console.log("Begining Add!!");
+  for (const assignment of dt){
+    addOneToDatabase(assignment);
+  }
+  console.log("Already Add!!");
+  //console.log(dt);
+  /*for (const [cv_cid, course] of Object.entries(dt)) {
+    if (course.length > 0){
+      for (assignment of course){
+        addOneToDatabase(assignment);
+      }
+    }
+  }*/
 
+}
+
+const addOneToDatabase = async (data) =>{
+  const options = {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+    
+  };
+
+  await fetch(
+    `http://${backendIPAddress}/todolists/add`, options);
+
+}
+addAll();
+/*-------------------------------------------------------------------------------------*/

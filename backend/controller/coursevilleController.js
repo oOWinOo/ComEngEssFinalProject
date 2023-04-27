@@ -148,7 +148,6 @@ exports.getCourseAssignments = async (req, res) => {
         });
         profileRes.on("end", () => {
           const profile = JSON.parse(profileData);
-          console.log(profile)
           res.send(profile);
           res.end();
         });
