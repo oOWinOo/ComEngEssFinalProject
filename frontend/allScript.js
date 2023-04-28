@@ -1,3 +1,4 @@
+
 const date = new Date();
 let prevChose = null;
 let toDoDate = document.getElementById("Day")
@@ -18,7 +19,7 @@ const months = [
 ];
 toDoDate.innerHTML = date.getDate()+" "+months[date.getMonth()]+" "+date.getFullYear();
 const backendIPAddress = "127.0.0.1:3000";
-
+const dataOfMonth = [];
 const todayid = date.getDate()+" "+months[date.getMonth()]+" "+date.getFullYear();
 const todayMonth = date.getMonth();
 //Render the calendar
@@ -120,25 +121,34 @@ const renderCalendar = () => {
 
 document.querySelector(".prev").addEventListener("click", () => {
   date.setMonth(date.getMonth() - 1);
+  getOnMonth(date.getMonth()+1,date.getFullYear());
   // console.log(date)
+  //  thisMonthData =  await getOnMonth(date.getMonth(),date.getFullYear());
   renderCalendar();
 });
 
 document.querySelector(".next").addEventListener("click", () => {
   date.setMonth(date.getMonth() + 1);
+  getOnMonth(date.getMonth()+1,date.getFullYear());
   // console.log(date)
-  renderCalendar();
 
+  renderCalendar();
 });
 
 renderCalendar();
 
 
 
-function choseDate(id){
+async function choseDate(id){
   toDoDate.innerHTML = id;
-  let dateArray = id.split(" "); // date month year
+  let dateArray = id.split(" "); // date month year date month year
+                                 // year month date
+  let shuffleDate = [dateArray[2],dateArray[1],dateArray[0]];
+  let checkDate = shuffleDate.join("-");
   console.log(dateArray);
+  
+
+  
   let x = new Date(dateArray[2],months.findIndex(x => x===dateArray[1]),dateArray[0]).toDateString().split(" ");
   let y = x.pop();
   document.querySelector(".date2").innerHTML = x.join(" ");
@@ -159,15 +169,27 @@ function choseDate(id){
   // alert(id);
   document.getElementById(id).style.backgroundColor = "#7A97FF";
   List();
-  
+  let todayData = await getOnDate(checkDate);
+
+  ShowList(todayData);
   
 }
+
 /*-------------------------------------------------------------------------------------*/
 
 // Add div
-function add(){
+const add = async () => {
   // Do something with the form data, such as adding it to a list or sending it to a server
   // ... 
+
+  // {courseName: courseName,
+  //   title:e.title,
+  //   assignment_id:e.itemid,
+  //   start:0,
+  //   finish:0,
+  //   duedate:itemInfo.duedate,
+  //   color:"#018ADA",
+  //   status:0}
 
   const date = document.querySelector('.ans[type="date"]').value;
   const subject = document.querySelector('#cars').value;
@@ -177,10 +199,10 @@ function add(){
   const detail = document.querySelector('.detail').value;
   var alert = "";
     if(date == ''){
-        alert += "please enter the date\n";
+        alert += "Please enter the date\n";
     }
     if(subject == "0"){
-        alert += "please enter the subject\n";
+        alert += "Please choose the subject\n";
     }
     if(alert == ""){
         document.querySelector('form').reset();
@@ -188,9 +210,21 @@ function add(){
         document.querySelector('.time[name="finish"]').value = '';
         alert = "success \n";
         addToDoList(date,subject,start,finish,color,detail)
-        //renderCalendar();
+        renderCalendar();
         
     }
+    const itemid = Date.now();
+    const data = {courseName: subject,
+                  title:detail,
+                  assignment_id:itemid,
+                  start:start,
+                  finish:finish,
+                  duedate:date,
+                  color:color,
+                  status:0};
+
+    addOneToDatabase(data);
+    
     if(alert == "success \n" && start != "" && finish == ""){
         alert += date + " " + subject + " \n Start at " + start +"\n"+detail;
     }
@@ -203,15 +237,80 @@ function add(){
     
   // Do something with the form data, such as adding it to a list or sending it to a server
   // ...  
-    List();
-    window.alert(alert);
-    window.alert(toDoList);
+
+    // window.alert(alert);
+    // window.alert(toDoList);
     //window.alert(toDoList[0][0][0].toString());
 
   // Reset the form
 
 };
 
+function addToDoList(date,subject,start,finish,color,detail){
+  toDoList = [];
+  toDoList.push([[date],[start,finish,subject,color,detail]]);
+}
+
+function List(){
+  for(let i = 0;i < document.getElementById("list").rows.lenth;i++){
+    //window.alert("del");
+    document.getElementById("list").deleteRow(i);
+  }
+  dayList = [];
+  if(toDoList != []){
+  for(let i=0;i < toDoList.length; i++){
+    if(sameDate(toDoList[i])){
+      dayList.push(toDoList[i]);
+    }
+  }
+  }
+  ShowList(dayList);
+}
+
+
+// function sameDate(list){
+//   a = toDoDate.innerHTML.split(" ");
+//   d = parseInt(months.indexOf(a[1]))+1
+//   if(d.length!=2){
+//     d = '0'+d.toString();
+//   }
+//   b = a[2]+"-"+d+"-"+a[0];
+//   if(list[0][0]==b){
+//     return true;
+//   }
+//   return false;
+// }
+
+function ShowList(dList){
+  // dList.sort();
+  //window.alert("dd");
+  var table = document.getElementById("list");
+  table.innerHTML = "";
+  console.log(dList);
+  for(var i of dList){
+    //window.alert(i);
+    
+    // [[date],[start,finish,subject,color,detail]]
+    var row = table.insertRow(table.rows.length - 1);
+    row.insertCell(0).innerHTML = i.courseName + i.title;
+  }
+}
+
+
+function formatStringDate(date){
+  let arr = date.split("-");
+  d = arr[2]
+  m = months[parseInt(arr[1]-1)];
+  y = arr[0]
+  return `${d} ${m} ${y}`;
+}
+
+/*-------------------------------------------------------------------------------------*/
+
+
+
+
+//MCV to Database 
 const logout = async () => {
   window.location.href = `http://${backendIPAddress}/courseville/logout`;
 };
@@ -293,7 +392,9 @@ const getAllCourseAssignments  = async () => {
           title:e.title,
           assignment_id:e.itemid,
           duedate:itemInfo.duedate,
+          color:"#018ADA",
           status:0});
+          //#018ADA
       }
     }
   }
@@ -301,36 +402,20 @@ const getAllCourseAssignments  = async () => {
   return assignments;
 };
 
-async function test(){
-  console.log("press");
-  //getCourses();
-
-
-  //getCourseName(24587);
-  // getCourses();
-  //getAssignTime(892965);
-  
-}
 const  addAll = async () =>{
-  console.log("Just Add!!");
+  console.log("Loading MCV!!");
   const dt = await getAllCourseAssignments();
-  console.log("Begining Add!!");
+  console.log("Begining Add MCV to db!!");
   for (const assignment of dt){
     addOneToDatabase(assignment);
   }
-  console.log("Already Add!!");
-  //console.log(dt);
-  /*for (const [cv_cid, course] of Object.entries(dt)) {
-    if (course.length > 0){
-      for (assignment of course){
-        addOneToDatabase(assignment);
-      }
-    }
-  }*/
+  console.log("Already Add MCV to db!!");
 
 }
 
+
 const addOneToDatabase = async (data) =>{
+  console.log("Beginning Add");
   const options = {
     method: "POST",
     credentials: "include",
@@ -340,57 +425,101 @@ const addOneToDatabase = async (data) =>{
     body: JSON.stringify(data)
     
   };
-
+  console.log("Pass Here");
   await fetch(
     `http://${backendIPAddress}/todolists/add`, options);
+  console.log("Done Add");
 
 }
-function addToDoList(date,subject,start,finish,color,detail){
-  toDoList.push([[date],[start,finish,subject,color,detail]]);
+// addAll();
+
+
+const getFromDatabase = async () => {
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+  await fetch(
+    `http://${backendIPAddress}/todolists/lists`, options)
+    .then((response) => response.json())
+    .then((data) => {
+      items = data;
+    })
+    return items;
 }
-function List(){
-  for(let i = 0;i < document.getElementById("list").rows.lenth;i++){
-    //window.alert("del");
-    document.getElementById("list").deleteRow(i);
-  }
-  dayList = [];
-  if(toDoList != []){
-  for(let i=0;i < toDoList.length; i++){
-    if(sameDate(toDoList[i])){
-      dayList.push(toDoList[i]);
+
+const getOnMonth = async (month,year) =>{
+  const data = await getFromDatabase();
+  const OnMonth = []
+  for(let i = 0;i < data.length; i++){
+    const duedate = data[i].duedate.split("-");
+    const y = duedate[0];
+    const m = duedate[1];
+
+    if (y == year && m == month){
+      OnMonth.push(data[i]);
     }
-}
   }
-  ShowList(dayList);
+  //console.log(OnMonth);
+  return OnMonth;
 }
-function sameDate(list){
-  a = toDoDate.innerHTML.split(" ");
-  d = parseInt(months.indexOf(a[1]))+1
-  if(d.length!=2){
-    d = '0'+d.toString();
+
+const thisMonthData = getOnMonth(date.getMonth()+1,date.getFullYear());
+
+
+const getOnDate = async (day) =>{
+   const OnMonth = await getOnMonth(date.getMonth()+1,date.getFullYear());
+   const OnDay = [];
+   const today = day.split("-")[2];
+   const thisMonth = day.split("-")[1];
+   for(let i = 0;i< OnMonth.length;i++){
+     const duedate = OnMonth[i].duedate.split("-");
+     const duemonth = months[parseInt(duedate[1])-1];
+     const dueday = duedate[2];
+     console.log(duemonth,thisMonth);
+     if (dueday == today && duemonth == thisMonth){
+        OnDay.push(OnMonth[i]);
+     }
+   }
+   console.log(OnDay);
+   return OnDay;
+  
+
+}
+
+const renderOptions = async() => {
+  const cv_cids = [];
+  const courses = await getCourses();
+  courses.forEach(e => {
+    cv_cids.push(e.cv_cid);
+  });
+
+  var select = document.getElementById("cars");
+  for(let i=0; i < cv_cids.length; i++){
+    const courseName = (await getCourseName(cv_cids[i])).title;
+    var opt = document.createElement('option');
+    opt.value = courseName;
+    opt.innerHTML = courseName;
+    select.appendChild(opt);
+
   }
-  b = a[2]+"-"+d+"-"+a[0];
-  if(list[0][0]==b){
-    return true;
-  }
-  return false;
 }
-function ShowList(dList){
-  dList.sort();
-  //window.alert("dd");
-  for(var i of dList){
-    //window.alert(i);
-    var table = document.getElementById("list");
-    var row = table.insertRow(table.rows.length - 1);
-    row.insertCell(0).innerHTML = i;
-  }
+renderOptions();
+
+async function test(){
+  console.log("press");
+    
+  // opt.value = "Hi";
+
+  // var select = document.getElementById("cars");
+  // var opt = document.createElement('option');
+  // opt.value = 1;
+  // opt.innerHTML = 2;
+  // select.appendChild(opt);
+  //getCourses();
+
+  //getCourseName(24587);
+  // getCourses();
+  //getAssignTime(892965);
+  
 }
-function formatStringDate(date){
-  let arr = date.split("-");
-  d = arr[2]
-  m = months[parseInt(arr[1]-1)];
-  y = arr[0]
-  return `${d} ${m} ${y}`;
-}
-addAll();
-/*-------------------------------------------------------------------------------------*/

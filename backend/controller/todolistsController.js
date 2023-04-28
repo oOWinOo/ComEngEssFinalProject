@@ -78,43 +78,5 @@ exports.addAssignment = async (req,res) => {
     console.error(err);
     res.status(500).send(err);
   }
-  /*
-  const uniqueAssignments = [];
-
-  // Filter out duplicates
-  for (let i = 0; i < dataArray.length; i++) {
-    const course = dataArray[i]; //item
-    for(const assign of course){
-      const params = {
-        TableName: process.env.aws_assignments_table,
-        Key: {
-          'assignment_id': assign.assignment_id
-        }
-      };
-      const result = await docClient.send(new GetCommand(params));
-      if (!result.Item) {
-        uniqueAssignments.push(item);
-      }
-    }
-  }
-
-  const requestItems = {
-    [process.env.aws_assignments_table]: uniqueAssignments.map((item) => ({
-      PutRequest: {
-        Item: item
-      }
-    }))
-  };
-
-  // You should change the response below.
-  try {
-    await docClient.send(new BatchWriteCommand({
-      RequestItems: requestItems
-    }));
-    return true;
-  } catch (err) {
-    console.error(err);
-    return false;
-  }*/
 
 };
