@@ -1,7 +1,7 @@
 const date = new Date();
 let prevChose = null;
 let toDoDate = document.getElementById("Day")
-
+let toDoList = [];
 const months = [
   "January",
   "February",
@@ -53,10 +53,11 @@ const renderCalendar = () => {
 
 
   document.querySelector(".date h1").innerHTML = months[date.getMonth()];
-  
+  document.querySelector(".date p").innerHTML = new Date().toDateString();
 
 
   let days = "";
+  let tempday = "";
   // console.log(prevLastDay);
   // console.log(firstDayIndex);
   for (let x = firstDayIndex; x > 0; x--) {
@@ -157,7 +158,7 @@ function choseDate(id){
   prevChose = id;
   // alert(id);
   document.getElementById(id).style.backgroundColor = "#7A97FF";
-  
+  List();
   
   
 }
@@ -167,6 +168,7 @@ function choseDate(id){
 function add(){
   // Do something with the form data, such as adding it to a list or sending it to a server
   // ... 
+
   const date = document.querySelector('.ans[type="date"]').value;
   const subject = document.querySelector('#cars').value;
   const start =  document.querySelector('.time[name="start"]').value;
@@ -185,6 +187,8 @@ function add(){
         document.querySelector('.time[name="start"]').value = '';
         document.querySelector('.time[name="finish"]').value = '';
         alert = "success \n";
+        addToDoList(date,subject,start,finish,color,detail)
+        //renderCalendar();
         
     }
     if(alert == "success \n" && start != "" && finish == ""){
@@ -199,7 +203,11 @@ function add(){
     
   // Do something with the form data, such as adding it to a list or sending it to a server
   // ...  
+    List();
     window.alert(alert);
+    window.alert(toDoList);
+    //window.alert(toDoList[0][0][0].toString());
+
   // Reset the form
 
 };
@@ -336,6 +344,53 @@ const addOneToDatabase = async (data) =>{
   await fetch(
     `http://${backendIPAddress}/todolists/add`, options);
 
+}
+function addToDoList(date,subject,start,finish,color,detail){
+  toDoList.push([[date],[start,finish,subject,color,detail]]);
+}
+function List(){
+  for(let i = 0;i < document.getElementById("list").rows.lenth;i++){
+    //window.alert("del");
+    document.getElementById("list").deleteRow(i);
+  }
+  dayList = [];
+  if(toDoList != []){
+  for(let i=0;i < toDoList.length; i++){
+    if(sameDate(toDoList[i])){
+      dayList.push(toDoList[i]);
+    }
+}
+  }
+  ShowList(dayList);
+}
+function sameDate(list){
+  a = toDoDate.innerHTML.split(" ");
+  d = parseInt(months.indexOf(a[1]))+1
+  if(d.length!=2){
+    d = '0'+d.toString();
+  }
+  b = a[2]+"-"+d+"-"+a[0];
+  if(list[0][0]==b){
+    return true;
+  }
+  return false;
+}
+function ShowList(dList){
+  dList.sort();
+  //window.alert("dd");
+  for(var i of dList){
+    //window.alert(i);
+    var table = document.getElementById("list");
+    var row = table.insertRow(table.rows.length - 1);
+    row.insertCell(0).innerHTML = i;
+  }
+}
+function formatStringDate(date){
+  let arr = date.split("-");
+  d = arr[2]
+  m = months[parseInt(arr[1]-1)];
+  y = arr[0]
+  return `${d} ${m} ${y}`;
 }
 addAll();
 /*-------------------------------------------------------------------------------------*/
