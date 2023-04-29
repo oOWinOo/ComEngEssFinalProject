@@ -322,30 +322,31 @@
   padding: 5px;
   background-color: #ADB3E3;
   text-align: left;
-  border-radius: 9999px;
-  width: 100%;
+  border-radius: 20px;
+  width: fit-content;
   display: block;
   margin-top: 19px;
   height: 80px
 }
 .head{
   display: flex;
+  justify-content: space-around;
 }
 .subject{
   font-size: 23px;
   font-weight: 900;
   color: #000;
   margin: 0;
-  margin-top: 3px;
-  margin-left: 80px;
+  /* margin-top: 1%; */
+  /* margin-left: 80px; */
 }
 .timmy{
   font-size: 15px;
   font-weight: 400;
   color: #3f3f3f;
   margin: 0;
-  margin-top: 14px;
-  margin-left: 420px;
+  margin-top: 1%;
+  /* margin-left: 420px; */
 }
 .listDetail{
   font-size: 15px;
@@ -357,9 +358,9 @@
   overflow-y:hidden;
   color: #4b4b4b;
   margin: 0;
-  margin-top: 0px;
-  margin-left: 100px;
-  margin-bottom: 0px;
+  margin-top: 2%;
+  margin-left: 15%;
+  /* margin-bottom: 0px; */
 }
 #dayList {
     background-color: #EDE9E9;
