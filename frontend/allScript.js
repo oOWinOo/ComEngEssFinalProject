@@ -63,10 +63,10 @@ const renderCalendar = () => {
   // console.log(firstDayIndex);
   for (let x = firstDayIndex; x > 0; x--) {
     if(date.getMonth()-1 < 0){
-      days += `<div id="${prevLastDay - x + 1} ${months[11]} ${date.getFullYear()-1}" class="prev-date" onclick= "choseDate(this.id)" >${prevLastDay - x + 1}</div>`;
+      days += `<div id="${prevLastDay - x + 1} ${months[11]} ${date.getFullYear()-1}" class="prev-date" onclick= "choseDate(this.id)" ><p>${prevLastDay - x + 1}</p><p></p></div>`;
     }
     else{
-      days += `<div id="${prevLastDay - x + 1} ${months[date.getMonth()-1]} ${date.getFullYear()}" class="prev-date" onclick= "choseDate(this.id)" >${prevLastDay - x + 1}</div>`;
+      days += `<div id="${prevLastDay - x + 1} ${months[date.getMonth()-1]} ${date.getFullYear()}" class="prev-date" onclick= "choseDate(this.id)" ><p>${prevLastDay - x + 1}</p><p></p></div>`;
     }
     
   }
@@ -78,24 +78,24 @@ const renderCalendar = () => {
       date.getFullYear() === new Date().getFullYear()
     ) 
     {
-      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" class="today" onclick= "choseDate(this.id)">${i}</div>`;
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" class="today" onclick= "choseDate(this.id)"><p>${i}</p><p></p></div>`;
     } 
     else if(!(date.getMonth() === todayMonth) && i===1){
-      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)" style="background-color:#7A97FF;">${i}</div>`;
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)" style="background-color:#7A97FF;"><p>${i}</p><p></p></div>`;
       prevChose = `${i} ${months[date.getMonth()]} ${date.getFullYear()}`
       toDoDate.innerHTML = `${i} ${months[date.getMonth()]} ${date.getFullYear()}`;
     }else {
-      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)">${i}</div>`;
+      days += `<div id="${i} ${months[date.getMonth()]} ${date.getFullYear()}" onclick= "choseDate(this.id)"><p>${i}</p><p></p></div>`;
     }
   }
 
   for (let j = 1; j <= nextDays; j++) {
 
     if(date.getMonth() >=11){
-      days += `<div id="${j} ${months[0]} ${date.getFullYear()+1}" class="next-date" onclick= "choseDate(this.id)">${j}</div>`;
+      days += `<div id="${j} ${months[0]} ${date.getFullYear()+1}" class="next-date" onclick= "choseDate(this.id)"><p>${j}</p><p></p></div>`;
     }
     else{
-      days += `<div id="${j} ${months[date.getMonth()+1]} ${date.getFullYear()}" class="next-date" onclick= "choseDate(this.id)">${j}</div>`;
+      days += `<div id="${j} ${months[date.getMonth()+1]} ${date.getFullYear()}" class="next-date" onclick= "choseDate(this.id)"><p>${j}</p><p></p></div>`;
     }
     
     // monthDays.innerHTML = days;
@@ -116,7 +116,38 @@ const renderCalendar = () => {
     
   }
   // console.log(days);
+  
+  let dataToDoList = [{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0}]
   monthDays.innerHTML = days;
+  addColorPoint(dataToDoList,monthDays);
 };
 
 document.querySelector(".prev").addEventListener("click", () => {
@@ -303,6 +334,47 @@ function formatStringDate(date){
   m = months[parseInt(arr[1]-1)];
   y = arr[0]
   return `${d} ${m} ${y}`;
+}
+
+function addColorPoint(dataToDoList,monthDays){
+  allDate = monthDays.children;
+  console.log(allDate);
+  for (let i = 0; i < dataToDoList.length ; i++) {
+    targetDate = formatStringDate(dataToDoList[i]["duedate"]);
+    // set img //
+    let addImg = document.createElement("img");
+    addImg.src = colorCodeToPath(dataToDoList[i]["color"]);
+    addImg.width = 10;
+    addImg.height = 10;
+    for (let j = 0; j < allDate.length; j++) {
+      if (targetDate === allDate[j].id) {
+
+        allDate[j].children[1].appendChild(addImg);
+      }
+    }
+  }
+
+  function colorCodeToPath(colorCode) {
+    if (colorCode === "#FF7D7D") {
+      return "Add/red.png"
+    }else if (colorCode === "#FFB665"){
+      return "Add/orange.png"
+    }else if (colorCode === "#FFFF61") {
+      return "Add/yellow.png"
+    }else if (colorCode === "#5DFF70") {
+      return "Add/green.png"
+    }else if (colorCode === "#53FBFF") {
+      return "Add/cyan.png"
+    }else if (colorCode === "#9B9DFF") {
+      return "Add/blue.png"
+    }else if (colorCode === "#E197FF") {
+      return "Add/pink.png"
+    }else if (colorCode === "#BFBFBF") {
+      return "Add/grey.png"
+    }else if (colorCode === "#018ADA") {
+      return "Add/MCV_color.png"
+    }
+  }
 }
 
 /*-------------------------------------------------------------------------------------*/
