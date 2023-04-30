@@ -3,6 +3,42 @@ const date = new Date();
 let prevChose = null;
 let toDoDate = document.getElementById("Day")
 let toDoList = [];
+let dataToDoList = [{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-28",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-02",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-17",
+    color:"#FFFF61",
+    status:0},{courseName: "CEE",
+    title:"Final Proj",
+    assignment_id:555,
+    start:0,
+    finish:0,
+    duedate:"2023-4-30",
+    color:"#FFFF61",
+    status:0}]
 const months = [
   "January",
   "February",
@@ -117,35 +153,7 @@ const renderCalendar = () => {
   }
   // console.log(days);
   
-  let dataToDoList = [{courseName: "CEE",
-    title:"Final Proj",
-    assignment_id:555,
-    start:0,
-    finish:0,
-    duedate:"2023-4-28",
-    color:"#FFFF61",
-    status:0},{courseName: "CEE",
-    title:"Final Proj",
-    assignment_id:555,
-    start:0,
-    finish:0,
-    duedate:"2023-4-28",
-    color:"#FFFF61",
-    status:0},{courseName: "CEE",
-    title:"Final Proj",
-    assignment_id:555,
-    start:0,
-    finish:0,
-    duedate:"2023-4-28",
-    color:"#FFFF61",
-    status:0},{courseName: "CEE",
-    title:"Final Proj",
-    assignment_id:555,
-    start:0,
-    finish:0,
-    duedate:"2023-4-28",
-    color:"#FFFF61",
-    status:0}]
+  
   monthDays.innerHTML = days;
   addColorPoint(dataToDoList,monthDays);
 };
@@ -176,7 +184,7 @@ async function choseDate(id){
                                  // year month date
   let shuffleDate = [dateArray[2],dateArray[1],dateArray[0]];
   let checkDate = shuffleDate.join("-");
-  console.log(dateArray);
+  //console.log(dateArray);
   
 
   
@@ -195,15 +203,57 @@ async function choseDate(id){
     
     
   }
+
+  
   document.querySelector(".year").innerHTML = dateArray[2];
   prevChose = id;
   // alert(id);
   document.getElementById(id).style.backgroundColor = "#7A97FF";
-  List();
+  //List();
+
+  //clear and add data part
+  document.getElementById("dayList").innerHTML = "";
+  for (let i = 0; i < dataToDoList.length ; i++) {
+    let targetList = dataToDoList[i];
+    if (formatStringDate(targetList["duedate"]) === id) {
+      let listbox = document.createElement("div");
+      listbox.className = "listBox"
+      let head = document.createElement("div");
+      head.className = "head"
+      let subject = document.createElement("div");
+      subject.className = "subject"
+      subject.textContent = targetList["courseName"];
+      let timmy = document.createElement("div");
+      timmy.className = "timmy"
+      //timmy.textContent = targetList[""]
+
+      //delete button 
+      let deletecontainder = document.createElement("div");
+      deletecontainder.className = "button-container";
+      let deletebutton = document.createElement("button");
+      deletebutton.className = "delete";
+      deletebutton.addEventListener("click",remove);
+      deletebutton.textContent = "delete";
+      deletecontainder.appendChild(deletebutton);
+      //listdetail
+      let listDetail = document.createElement("div");
+      listDetail.className = "listDetail";
+      listDetail.textContent = targetList["title"];
+
+
+      head.appendChild(subject);
+      head.appendChild(timmy);
+      head.appendChild(deletecontainder)
+      listbox.appendChild(head)
+      listbox.appendChild(listDetail);
+
+      document.getElementById("dayList").appendChild(listbox);
+    }
+  }
+
   let todayData = await getOnDate(checkDate);
 
   ShowList(todayData);
-  
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -317,7 +367,7 @@ function ShowList(dList){
   //window.alert("dd");
   var table = document.getElementById("list");
   table.innerHTML = "";
-  console.log(dList);
+  //console.log(dList);
   for(var i of dList){
     //window.alert(i);
     
@@ -377,6 +427,9 @@ function addColorPoint(dataToDoList,monthDays){
   }
 }
 
+function remove(event) {
+  event.target.closest('.listBox').remove();
+}
 /*-------------------------------------------------------------------------------------*/
 
 

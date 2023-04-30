@@ -363,6 +363,10 @@
   margin-left: 15%;
   /* margin-bottom: 0px; */
 }
+.delete {
+  margin-left:50px;
+  margin-top: 25px;
+}
 #dayList {
     background-color: #EDE9E9;
     color: #000;
