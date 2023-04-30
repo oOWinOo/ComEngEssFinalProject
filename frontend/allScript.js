@@ -5,35 +5,35 @@ let toDoDate = document.getElementById("Day")
 let toDoList = [];
 let dataToDoList = [{courseName: "CEE",
     title:"Final Proj",
-    assignment_id:555,
+    assignment_id:1,
     start:0,
     finish:0,
     duedate:"2023-4-28",
     color:"#FFFF61",
     status:0},{courseName: "CEE",
     title:"Final Proj",
-    assignment_id:555,
+    assignment_id:2,
     start:0,
     finish:0,
     duedate:"2023-4-28",
     color:"#FFFF61",
     status:0},{courseName: "CEE",
     title:"Final Proj",
-    assignment_id:555,
+    assignment_id:3,
     start:0,
     finish:0,
     duedate:"2023-4-02",
     color:"#FFFF61",
     status:0},{courseName: "CEE",
     title:"Final Proj",
-    assignment_id:555,
+    assignment_id:4,
     start:0,
     finish:0,
     duedate:"2023-4-17",
     color:"#FFFF61",
     status:0},{courseName: "CEE",
     title:"Final Proj",
-    assignment_id:555,
+    assignment_id:5,
     start:0,
     finish:0,
     duedate:"2023-4-30",
@@ -218,6 +218,7 @@ async function choseDate(id){
     if (formatStringDate(targetList["duedate"]) === id) {
       let listbox = document.createElement("div");
       listbox.className = "listBox"
+      listbox.id = targetList["assignment_id"]
       let head = document.createElement("div");
       head.className = "head"
       let subject = document.createElement("div");
@@ -428,7 +429,18 @@ function addColorPoint(dataToDoList,monthDays){
 }
 
 function remove(event) {
+  let assignmentRemoveId = event.target.closest('.listBox').id;
+  //console.log(assignmentRemoveId);
   event.target.closest('.listBox').remove();
+  for (let i = 0; i < dataToDoList.length ; i++) {
+    if (dataToDoList[i]["assignment_id"].toString() === assignmentRemoveId) {
+      console.log(dataToDoList[i]);
+      dataToDoList.splice(i, 1);
+      break;
+    }
+  }
+  console.log(dataToDoList);
+  renderCalendar();
 }
 /*-------------------------------------------------------------------------------------*/
 
