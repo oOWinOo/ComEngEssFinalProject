@@ -24,7 +24,7 @@ exports.getTodolists = async (req, res) => {
   }
 };
 
-// TODO #1.3: Delete an item from DynamDB
+
 exports.deleteAssignment = async (req, res) => {
   const userid = req.params.userid;
   const params = {
@@ -33,7 +33,7 @@ exports.deleteAssignment = async (req, res) => {
       userid: userid
     }
   };
-  // You should change the response below.
+
   try {
     await docClient.send(new DeleteCommand(params));
     res.status(200).end();
@@ -52,7 +52,7 @@ exports.addAssignment = async (req,res) => {
     Item: user,
   };
 
-  // You should change the response below.
+
   try {
     await docClient.send(new PutCommand(params));  
     res.status(200).end();
@@ -78,7 +78,7 @@ exports.updateAssignment = async (req, res) => {
     ReturnValues: "UPDATED_NEW"
   };
 
-  // You should change the response below.
+
   try {
     await docClient.send(new UpdateCommand(params));  
     res.status(200).end();
