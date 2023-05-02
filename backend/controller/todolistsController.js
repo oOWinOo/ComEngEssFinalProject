@@ -6,6 +6,7 @@ const {
   PutCommand,
   DeleteCommand,
   ScanCommand,
+  UpdateCommand
 } = require("@aws-sdk/lib-dynamodb");
 
 const docClient = new DynamoDBClient({ regions: process.env.AWS_REGION });
@@ -23,32 +24,13 @@ exports.getTodolists = async (req, res) => {
   }
 };
 
-// TODO #1.2: Add an item to DynamoDB
-exports.addAssignmentUser = async (req, res) => {
-  const assignment_id = uuidv4();
-  const assignment = { assignment_id: assignment_id, ...req.body};
-  const params = {
-    TableName: process.env.aws_assignments_table,
-    Item: assignment,
-  };
-
-  // You should change the response below.
-  try {
-    await docClient.send(new PutCommand(params));  
-    res.status(200).end();
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
-};
-
 // TODO #1.3: Delete an item from DynamDB
 exports.deleteAssignment = async (req, res) => {
-  const assignment_id = req.params.assignment_id;
+  const userid = req.params.userid;
   const params = {
     TableName: process.env.aws_assignments_table,
     Key: {
-      assignment_id: assignment_id
+      userid: userid
     }
   };
   // You should change the response below.
@@ -64,10 +46,10 @@ exports.deleteAssignment = async (req, res) => {
 
 
 exports.addAssignment = async (req,res) => {
-  const assignment = { assignment_id: req.assignment_id, ...req.body};
+  const user = { userid: req.userid, ...req.body};
   const params = {
     TableName: process.env.aws_assignments_table,
-    Item: assignment,
+    Item: user,
   };
 
   // You should change the response below.
@@ -80,3 +62,29 @@ exports.addAssignment = async (req,res) => {
   }
 
 };
+
+exports.updateAssignment = async (req, res) => {
+  const new_data = { userid: req.userid, ...req.body};
+  const userid = new_data.userid;
+  const params = {
+    TableName: process.env.aws_assignments_table,
+    Key: {
+      userid
+    },
+    UpdateExpression: "SET assignments = :new_data",
+    ExpressionAttributeValues: {
+      ":new_data": new_data.assignments
+    },
+    ReturnValues: "UPDATED_NEW"
+  };
+
+  // You should change the response below.
+  try {
+    await docClient.send(new UpdateCommand(params));  
+    res.status(200).end();
+  } catch (err) {
+    console.log(new_data);
+    console.error(err);
+    res.status(500).send(err);
+  }
+}

@@ -74,14 +74,21 @@ exports.accessToken = (req, res) => {
 
 //Get Profile Info
 exports.getProfileInformation = (req, res) => {
+  //console.log("start")
+  if (!req.session.token){
+    res.status(401).send("UnAuthorize");
+  }
   try {
+    console.log("before profile",req.session.token);
     const profileOptions = {
       headers: {
         Authorization: `Bearer ${req.session.token.access_token}`,
       },
     };
+    //"https://www.mycourseville.com/api/v1/public/users/me"
+    console.log("start")
     const profileReq = https.request(
-      "https://www.mycourseville.com/api/v1/public/users/me",
+      "https://www.mycourseville.com/api/v1/public/get/user/info",
       profileOptions,
       (profileRes) => {
         let profileData = "";
@@ -96,6 +103,7 @@ exports.getProfileInformation = (req, res) => {
       }
     );
     profileReq.on("error", (err) => {
+      console.log("in error")
       console.error(err);
     });
     profileReq.end();
@@ -132,6 +140,20 @@ exports.getCourses = async (req, res) => {
 //Get Course Assignments
 exports.getCourseAssignments = async (req, res) => {
   const cv_cid = req.params.cv_cid;
+  const profileOptions = {
+    headers: {
+      Authorization: `Bearer ${req.session.token.access_token}`,
+    },
+  };
+  /*try{
+    const data = await axios.get(`https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${cv_cid}`,profileOptions);
+    const assignments = data.data.data;
+    console.log(assignments[0])
+    res.status(200).send(assignments);
+  }catch (error) {
+    console.log(error);
+    console.log("Please logout, then login again.");
+  }*/
   try {
     const profileOptions = {
       headers: {
@@ -139,7 +161,7 @@ exports.getCourseAssignments = async (req, res) => {
       },
     };
     const profileReq = https.request(
-      `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${cv_cid}`,
+      `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${cv_cid}&detail=1`,
       profileOptions,
       (profileRes) => {
         let profileData = "";
@@ -148,6 +170,7 @@ exports.getCourseAssignments = async (req, res) => {
         });
         profileRes.on("end", () => {
           const profile = JSON.parse(profileData);
+          //console.log(profile);
           res.send(profile);
           res.end();
         });

@@ -5,11 +5,16 @@
 }
 
 body {
-  font-family: "Mitr", sans-serif;
+  margin-top: 10%;
+  background-color: "#FFFFF";
+  /* background-image: linear-gradient(90deg, rgb(211, 211, 211) 9.16%, rgb(121, 120, 120) 43.89%, #4b4b4b 64.72%); */
+  /* background-color: #7A97FF; */
+  font-family: 'Poppins';
 }
 
 #app-name {
-  font-size: 2.2em;
+  font-size: 96px;
+  ;
   font-weight: bold;
   margin: 0;
   text-align: center;
@@ -49,29 +54,72 @@ section {
   font-size: 1em;
 }
 
-.button {
-  border-radius: 8px;
-  padding: 5px 5px;
-  border: 1px solid #aaa;
-  background: white;
+
+/* CSS */
+.login-button {
+  /* appearance: button; */
+  background-color: #1899D6;
+  border: none;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
   cursor: pointer;
-  font-family: "Mitr", sans-serif;
-  font-size: 1em;
+  display: inline-block;
+  font-family: 'Poppins';
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
   text-align: center;
-  width: fit-content;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 80%;
+  max-width: 500px;
 }
-.button:hover {
-  background: rgb(255, 200, 105);
-  color: white;
+
+.login-button::after {
+  background-clip: padding-box;
+  background-color: #1CB0F6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
 }
-.logout-button:hover {
-  background: rgb(204, 19, 19);
-  color: white;
+
+.login-button:main,
+.login-button:focus {
+  user-select: auto;
 }
-.change-page-button:hover {
-  background: rgb(94, 127, 236);
-  color: white;
+
+.login-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
 }
+
+.login-button:disabled {
+  cursor: auto;
+}
+
+
+
+
 
 .main-table {
   margin: 10px 0;

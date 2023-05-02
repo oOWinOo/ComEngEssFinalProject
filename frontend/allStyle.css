@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Quicksand", sans-serif;
+    /* font-family: "Quicksand", sans-serif; */
   }
 
   html {
@@ -20,8 +20,8 @@
       z-index: 100;
       background-color: #7A97FF;
       height: 5%;
-      max-height: 30px;
-      min-height:30px;
+      max-height: 60px;
+      min-height:40px;
       border-color: #000;
   }
 
@@ -59,7 +59,10 @@
       cursor: pointer;
       background-color: rgb(227, 75, 20);
   }
-  
+  .button-container{
+    margin-top: 0.5%;
+    margin-right: 3%;
+  }
   .container {
     width: 90%;
     height: 80%;
@@ -219,6 +222,7 @@
 .box{
   display : flex;
   width: 90%;
+  justify-content: center;
   margin-top: 5%;
   margin-left: 5%;
   
@@ -321,7 +325,7 @@
 }
 .listBox{
   padding: 5px;
-  background-color: #ADB3E3;
+  /* background-color: #ADB3E3; */
   text-align: left;
   border-radius: 20px;
   width: fit-content;
@@ -331,13 +335,14 @@
 }
 .head{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+
 }
 .subject{
   font-size: 23px;
   font-weight: 900;
   color: #000;
-  margin: 0;
+  margin-left: 5%;
   /* margin-top: 1%; */
   /* margin-left: 80px; */
 }
@@ -357,16 +362,62 @@
   overflow: auto;
   overflow-wrap: break-word;
   overflow-y:hidden;
-  color: #4b4b4b;
+  color: #000000;
   margin: 0;
   margin-top: 2%;
   margin-left: 15%;
   /* margin-bottom: 0px; */
 }
-.delete {
+/* .delete {
   margin-left:50px;
   margin-top: 25px;
+
+} */
+
+
+/* CSS */
+.delete {
+  margin-right: 3%;
+  background-color: #111827;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  padding: .75rem 1.2rem;
+  text-align: center;
+  text-decoration: none #6B7280 solid;
+  text-decoration-thickness: auto;
+  transition-duration: .2s;
+  transition-property: background-color,border-color,color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
 }
+
+.delete:hover {
+  background-color: #374151;
+}
+
+.delete:focus {
+  box-shadow: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .delete {
+    padding: .75rem 1.5rem;
+  }
+}
+
 #dayList {
     background-color: #EDE9E9;
     color: #000;
