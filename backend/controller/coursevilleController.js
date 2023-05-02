@@ -54,7 +54,7 @@ exports.accessToken = (req, res) => {
           console.log(req.session);
           if (token) {
             res.writeHead(302, {
-              Location: `http://${process.env.frontendIPAddress}/index.html`,
+              Location: `http://${process.env.frontendIPAddress}/Index.html`,
             });
             res.end();
           }
@@ -75,9 +75,9 @@ exports.accessToken = (req, res) => {
 //Get Profile Info
 exports.getProfileInformation = (req, res) => {
   //console.log("start")
-  if (!req.session.token){
+  /*if (!req.session.token){
     res.status(401).send("UnAuthorize");
-  }
+  }*/
   try {
     console.log("before profile",req.session.token);
     const profileOptions = {
@@ -97,7 +97,7 @@ exports.getProfileInformation = (req, res) => {
         });
         profileRes.on("end", () => {
           const profile = JSON.parse(profileData);
-          res.send(profile);
+          res.status(200).send(profile);
           res.end();
         });
       }
@@ -108,8 +108,10 @@ exports.getProfileInformation = (req, res) => {
     });
     profileReq.end();
   } catch (error) {
+
     console.log(error);
     console.log("Please logout, then login again.");
+    res.status(401).send(error);
   }
 };
 
@@ -226,6 +228,6 @@ exports.getAssignmentDetail = async (req, res) => {
 
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect(`http://${process.env.frontendIPAddress}/login.html`);
+  res.redirect(`http://${process.env.frontendIPAddress}/index.html`);
   res.end();
 };

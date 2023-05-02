@@ -1,4 +1,4 @@
-const backendIPAddress = "3.212.76.154:3000" //"127.0.0.1:3000";
+const backendIPAddress = "127.0.0.1:3000"//"3.212.76.154:3000" //"127.0.0.1:3000";
 //MCV to Database
 //MyCourseVille Scripts
 //================================================================================================================================================================================================
@@ -801,23 +801,23 @@ function addColorPoint(dataToDoList, monthDays) {
 
   function colorCodeToPath(colorCode) {
     if (colorCode === "#FF7D7D") {
-      return "Add/red.png";
+      return "red.png";
     } else if (colorCode === "#FFB665") {
-      return "Add/orange.png";
+      return "orange.png";
     } else if (colorCode === "#FFFF61") {
-      return "Add/yellow.png";
+      return "yellow.png";
     } else if (colorCode === "#5DFF70") {
-      return "Add/green.png";
+      return "green.png";
     } else if (colorCode === "#53FBFF") {
-      return "Add/cyan.png";
+      return "cyan.png";
     } else if (colorCode === "#9B9DFF") {
-      return "Add/blue.png";
+      return "blue.png";
     } else if (colorCode === "#E197FF") {
-      return "Add/pink.png";
+      return "pink.png";
     } else if (colorCode === "#BFBFBF") {
-      return "Add/gray.png";
+      return "gray.png";
     } else if (colorCode === "#018ADA") {
-      return "Add/MCV_color.png";
+      return "MCV_color.png";
     }
   }
 }
@@ -898,29 +898,38 @@ async function main() {
   
 }
 
-/*window.onload = async function(){
-  try{
+window.onload = async function getAllTask() {
+  let me = false;
+
+  try {
     const options = {
       method: "GET",
       credentials: "include",
-    };
-    console.log('fetch')
-    const data = fetch(
-      `http://${backendIPAddress}/courseville/get_profile_info`,
-      options
-    );
-    //main();
-    console.log('finish')
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }
+    me = await fetch(`http://${backendIPAddress}/courseville/get_profile_info`, options).then(res => res.status).catch(err => console.log("is not login"));
+  
+  } catch (error) {
+    
+    console.log("is not login")
+    // document.body.innerHTML = `<h1>Please Login First</h1>`
   }
-  catch(err){
-    console.log('err')
-    document.documentElement.innerHTML = `<!DOCTYPE html>
+  console.log(me);
+  if (me === 200) {
+    main();
+    console.log("pass")
+    
+  } else {
+    document.body.innerHTML = `<!DOCTYPE html>
     <html>
     
         <head>
             <meta charset="UTF-8">
             <title>MyCourseville API Login Page</title>
             <link rel="stylesheet" href="style.css"></link>
+            <script src="script_cv.js" defer></script>
         </head>
         <body>
             <section>
@@ -935,11 +944,11 @@ async function main() {
                 </header>
             </section>
             <section class="section-center">
-                <button class="login-button" onclick=authorizeApplication()>Login</button>
+                <button class="login-button" onclick="authorizeApplication()">Login</button>
             </section>
         </body>
-    </html>`;
+    </html>`
   }
-};*/
+}
 
-main()
+// main()
